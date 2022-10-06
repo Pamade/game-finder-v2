@@ -1,0 +1,23 @@
+.navigation{
+    font-weight: bold;
+    
+    &__list-item-genre{
+        display: none;
+    }
+    
+}
+@media (min-width: 1200px) {
+    .navigation{
+        &__genres{
+            display: block;
+        }
+        &__list-item-genres{
+            height: 5px;
+        }
+        &__list-item-genre{
+            height: 1px;
+            font-size: 0.8rem;
+            display: block;
+        }
+    }
+}

@@ -1,0 +1,12 @@
+$btn-size: 35px;
+
+.page-buttons{
+    display: flex;
+    justify-content: center;
+    &__btn{
+        color: black;
+        width:$btn-size;
+        height:$btn-size;
+        border-radius: 50%;
+    }
+}

@@ -1,0 +1,55 @@
+.games-content{    
+    &__filters{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+    }
+    &__select{
+        width: 35%;
+        color: $app-background-color;
+        border-radius: 10px;
+        padding: 3px;
+        margin: 0.5rem 0;
+        background-color: $primary-color;
+        font-weight: bold;
+        &-option{
+            color: $app-background-color;
+        }
+    }
+    &__list{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    &__list-item-genres{
+        margin: 0.2rem 1rem;
+        font-size: 0.8rem;
+    }
+}
+
+@media (min-width:600px) {
+    .games-content{
+        &__filters{
+            justify-content: space-between;
+        }
+        &__select{
+            width: 25%;
+        }
+    }
+}
+@media (min-width:1200px) {
+    .games-content{
+        width: 100%;
+        margin-right: 2rem;
+        &__filters{
+            width: 42%;
+        }
+        &__select{
+            height: 30px;
+            width: 30%;
+        }
+        &__list{
+            display: none;
+        }
+    }
+}

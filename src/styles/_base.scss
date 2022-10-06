@@ -1,0 +1,20 @@
+*{
+    margin: 0;
+    padding: 0;
+    color: $primary-color;
+    font-family:'Heebo', Arial, Helvetica, sans-serif;
+}
+
+.App{
+    min-height: 100vh;
+    background-color: $app-background-color;
+}
+
+ul{
+    list-style-type: none;
+}
+
+a{
+    text-decoration: none;
+}
+

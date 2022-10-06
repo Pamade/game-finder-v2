@@ -1,58 +1,55 @@
-import React from 'react';
-import logo from './logo.svg';
-import { Counter } from './features/counter/Counter';
-import './App.css';
+import { useEffect } from "react";
+import { useAppDispatch } from "./app/hooks";
+import { Routes, Route } from "react-router-dom";
+import Header from "./components/header/Header";
+import AsideNavigation from "./components/aside-navigation/AsideNavigation";
+import GamesContent from "./gamesContent/GamesContent";
+import "./styles/main.scss";
+import { fetchData } from "./features/data/dataSlice";
+import { StringOrNull } from "./types";
+import GamesTrendings from "./gamesContent/games-trendings/GamesTrendings";
+import GamesByName from "./gamesContent/games-by-name/GamesByName";
 
-function App() {
+const App = () => {
+  const dispatch = useAppDispatch();
+  const getData = (
+    search_type: string,
+    ordering: StringOrNull,
+    date: StringOrNull,
+    platform: StringOrNull
+  ) => {
+    dispatch(fetchData({ search_type, ordering, date, platform }));
+  };
+  useEffect(() => {
+    // dispatch(fetchGenres());
+    // TUTAJ BĘDZIE GŁÓWNA STRONA I FECZNIE NAJPOPULARNIEJSZE,
+    // AKUTLANIE FECZUJE Z WSZYSTYKIE GRY
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <Counter />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <span>
-          <span>Learn </span>
-          <a
-            className="App-link"
-            href="https://reactjs.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux
-          </a>
-          <span>, </span>
-          <a
-            className="App-link"
-            href="https://redux-toolkit.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Redux Toolkit
-          </a>
-          ,<span> and </span>
-          <a
-            className="App-link"
-            href="https://react-redux.js.org/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            React Redux
-          </a>
-        </span>
-      </header>
+      <Header />
+
+      <main className="content-wrapper">
+        <AsideNavigation />
+        <Routes>
+          <Route path="" element={<GamesTrendings getData={getData} />} />
+          <Route
+            path="/trendings"
+            element={<GamesTrendings getData={getData} />}
+          />
+          <Route
+            path="/games/page=:page/ordering=:orderingLink/date=:dateLink/platform=:platformLink"
+            element={<GamesContent getData={getData} />}
+          />
+          <Route
+            path="/search/:gameName/page=:page"
+            element={<GamesByName />}
+          />
+        </Routes>
+      </main>
     </div>
   );
-}
+};
 
 export default App;
