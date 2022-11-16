@@ -1,0 +1,75 @@
+
+$radius-background: 30px;
+$medium-size-width: 32%;
+
+.game-details{    
+    width: 100%;
+    margin-right: 2rem;
+    &__released{
+        font-size: 0.8rem;
+    }
+    &__title{
+        padding: 1rem 0 0.5rem 0;
+        font-size: 2rem;
+        word-spacing: 5px;
+    }
+    &__about{
+        width: 95%;
+        margin: 0 auto;
+        padding-top: 1rem;
+    }
+    &__series{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    &__serie-background{
+        @include relativeBackground;
+        height: 200px;
+        width: 45%;
+        margin: 1rem 0;
+        border-radius: $radius-background;
+        &::before{
+            @include backgroundDarker;
+            transition: 1s;
+            border-radius: $radius-background;
+        }
+        &:hover::before{
+            background-color: rgba(0,0,0, 0.4);
+        }
+    }
+    &__serie-name{
+        text-align: center;
+        position: relative;
+        color: white;
+        font-weight: bold;
+        font-size: 1.1rem;
+    }
+}
+
+@media (min-width: 760px){
+    .game-details{
+        &__serie-background{
+            height: 250px;
+        }
+    }
+}
+@media (min-width: 1200px){
+    .game-details{
+        &__about{
+            width: 100%;
+        }
+        &__series{
+            justify-content: left;
+        }
+        &__serie-background{
+            @include galleryImageMedium;
+        }
+        &__more-info{
+            justify-content: flex-start;
+            &-box{
+                width: $medium-size-width;
+            }
+        }
+    }
+}

@@ -1,4 +1,5 @@
 @import '_variables';
+@import './mixins';
 @import '_base';
 @import './content-wrapper';
 @import '../components/header/header';
@@ -7,5 +8,15 @@
 @import '../gamesContent/games-content';
 @import '../gamesContent/games-wrapper/games-wrapper';
 @import '.././components/page-buttons/page-buttons';
-@import '../gamesContent/games-trendings/games-trendings'
+@import '../gamesContent/games-trendings/games-trendings';
+@import '../components/game-details/game-details';
+@import '../components/game-details/MainInfo/main-info';
+@import '../components/game-details/MoreInfo/more-info';
+@import '../components/game-details/Achievements/achievements';
+@import '../components/game-details/Description/description';
+@import '../components/game-details/Developers/developers';
+@import '../components/game-details/Screenshots/screenshots';
+@import "../components/publishers/publishers"
+
+
 

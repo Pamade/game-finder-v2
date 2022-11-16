@@ -1,0 +1,13 @@
+.game-description{
+    font-size: 0.9rem;
+    &--toggle{
+        font-weight: bold;
+        font-size: 0.95rem;
+        cursor: pointer;
+        background-color: #aaa;
+        color: black;
+        padding: 0 10px;
+        margin-left: 10px;
+        border-radius: 2px;
+    }
+}

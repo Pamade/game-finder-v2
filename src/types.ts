@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-//Fetch data types
 export type StringOrNull = string | null;
 
 export interface SearchArg {
@@ -7,6 +6,7 @@ export interface SearchArg {
   ordering: StringOrNull;
   date: StringOrNull;
   platform: StringOrNull;
+  genre: StringOrNull;
 }
 
 export interface GetDataProps {
@@ -14,7 +14,18 @@ export interface GetDataProps {
     search_type: string,
     ordering: StringOrNull,
     date: StringOrNull,
-    platform: StringOrNull
+    platform: StringOrNull,
+    genre: StringOrNull
   ): void;
   type?: string;
+}
+
+export interface GameSeries {
+  name: string;
+  background_image: string;
+  slug: string;
+}
+
+export interface Platform {
+  platform: { name: string };
 }

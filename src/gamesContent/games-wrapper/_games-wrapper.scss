@@ -28,12 +28,6 @@ $metacritic-border-size: 35px;
         padding: 2rem 1rem;
         background-color: #1d1d1d;
     }
-    &__platform-icon{
-        margin: 0 10px;
-        &:nth-of-type(1){
-            margin: 0 10px 0 0;
-        }
-    }
     &__rating{
         width: $metacritic-border-size;
         height: $metacritic-border-size;
@@ -64,14 +58,14 @@ $metacritic-border-size: 35px;
 }
 
 @media (min-width: 1200px){
-    
     .games-wrapper{
-        justify-content: space-evenly;
+        justify-content: flex-start;
         &__background-single{
             height: 25vh;
         }
         &__single-game-box{
             width: 24.5%;
+            margin-right: 5px;
             position: relative;
             &:hover .games-wrapper__additional-info{
                 display: block;

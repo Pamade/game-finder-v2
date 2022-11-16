@@ -11,14 +11,20 @@ const day = today.getDate();
 const month = today.getMonth() + 1;
 const year = today.getFullYear();
 const priorDate30 = priorDate.toISOString().slice(0, 10);
-const str = `${year}-${Number(month) < 10 ? `0${month}` : month}-${
-  Number(day) < 10 ? `0${day}` : day
-}`;
+export const currentDate = `${year}-${
+  Number(month) < 10 ? `0${month}` : month
+}-${Number(day) < 10 ? `0${day}` : day}`;
 
 const GamesTrendings = ({ getData }: GetDataProps) => {
   const { currentPage } = useAppSelector(selectData);
   useEffect(() => {
-    getData("games", "-metacritic", priorDate30 + "," + str, null);
+    getData(
+      "games",
+      "-metacritic",
+      priorDate30 + "," + currentDate,
+      null,
+      null
+    );
   }, [currentPage]);
 
   return (

@@ -1,0 +1,22 @@
+.screenshots{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 3rem 0;
+    &__screenshot{
+        width: 43%;
+        padding: 10px 10px 10px 0;
+        
+    }
+}
+
+@media (min-width: 760px){
+    .screenshots{
+        justify-content: flex-start;
+        &__screenshot{
+            padding: 10px 0;
+            @include galleryImageMedium;
+        }
+    }
+
+}

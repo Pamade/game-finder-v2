@@ -1,0 +1,32 @@
+.more-info{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+    width: 100%;
+    &__box{
+        width: 45%;
+        margin: 1rem 0;
+        text-align: left;
+    }
+    &__content{
+        width: 80%;
+    }
+    &__info-value{
+        display: block;
+        font-size: 0.8rem;
+        margin-right: 5px;
+        word-wrap:break-word;
+    }
+    &__link{
+        text-decoration: underline;
+    }
+}
+
+@media (min-width: 760px) {
+    .more-info{
+        &__box{
+            width: 30%;
+        }
+    }
+}

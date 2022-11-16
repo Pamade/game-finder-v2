@@ -10,9 +10,10 @@ interface NavLink {
 
 const navigationLinks = [
   { name: "Home", path: "/" },
+  { name: "Publishers", path: "/publishers/page=1" },
   {
     name: "All Games",
-    path: "/games/page=1/ordering=-added/date= /platform=4",
+    path: "/games/page=1/ordering=-popularity/date= /platform=PC",
   },
 ];
 

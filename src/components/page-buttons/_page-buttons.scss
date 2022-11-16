@@ -8,5 +8,9 @@ $btn-size: 35px;
         width:$btn-size;
         height:$btn-size;
         border-radius: 50%;
+        &--active{
+            background-color: #2cab33;
+            color: white;
+        }
     }
 }

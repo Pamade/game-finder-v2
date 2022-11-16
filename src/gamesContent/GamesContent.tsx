@@ -1,5 +1,4 @@
-/* eslint-disable no-unused-vars */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import GamesWrapper from "./games-wrapper/GamesWrapper";
 import Genres from "../components/genres/Genres";
 import { GetDataProps } from "../types";
@@ -8,8 +7,8 @@ import {
   selectData,
   goToFirstPage,
   setupPage,
+  API_KEY,
 } from "../features/data/dataSlice";
-import { API_KEY } from "../features/data/dataSlice";
 import { useParams, useNavigate } from "react-router-dom";
 
 interface Platform {
@@ -18,44 +17,37 @@ interface Platform {
   games_count: number;
 }
 
-const orderByOrdering = ["added", "name", "released", "metacritic"];
-const orderByDate = ["2019-01-01,2019-12-31", "2020-01-01,2020-12-31"];
+const max = new Date().getFullYear();
+const min = max - 30;
+let years: string[] = [];
 
-const GamesContent = ({ getData, type }: GetDataProps) => {
+for (let i = max; i >= min; i--) {
+  years.push(String(i));
+}
+
+years = years.map(
+  (item: string, index: number) =>
+    `${years[index + 1]}-12-31,${String(item)}-12-31`
+);
+
+const orderByOrdering = ["popularity", "released", "metacritic", "name"];
+const orderByDate = years.slice(0, -1);
+
+const GamesContent = ({ getData }: GetDataProps) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  const platfromValue = useRef<HTMLSelectElement>(null);
   const { currentPage } = useAppSelector(selectData);
-  const { page, dateLink, platformLink, orderingLink } = useParams();
+  const { page, dateLink, platformLink, orderingLink, genre } = useParams();
+  const [platforms, setPlatforms] = useState<Platform[]>([]);
+  const [findPlatId, setFindPlatId] = useState<any>("4");
+
   const [filters, setFilters] = useState({
-    ordering: orderingLink || "-added",
-    date: dateLink || " ",
-    platform: platformLink || "4",
+    ordering: orderingLink,
+    date: dateLink,
+    platform: { id: findPlatId, name: platformLink },
   });
-
-  const [platforms, setPlatforms] = useState<Platform[]>([
-    { id: 4, name: "PC", games_count: 0 },
-  ]);
-
-  useEffect(() => {
-    dispatch(setupPage(Number(page)));
-  }, [page]);
-
-  useEffect(() => {
-    navigate(
-      `/games/page=${currentPage}/ordering=${filters.ordering}/date=${
-        filters.date ? filters.date : " "
-      }/platform=${filters.platform}`,
-      { replace: true }
-    );
-    getData("games", filters.ordering, filters.date, filters.platform);
-    console.log(filters);
-  }, [filters, currentPage]);
-
-  useEffect(() => {
-    if (type !== "search") {
-      getData("games", filters.ordering, filters.date, filters.platform);
-    }
-  }, [filters, currentPage]);
 
   useEffect(() => {
     fetch(`https://api.rawg.io/api/platforms?key=${API_KEY}`)
@@ -69,18 +61,59 @@ const GamesContent = ({ getData, type }: GetDataProps) => {
       );
   }, []);
 
+  useEffect(() => {
+    if (platforms && platforms.length !== 0) {
+      const foundItem = platforms.find(
+        (item: Platform) => item.name === platformLink
+      );
+      setFindPlatId(foundItem?.id);
+    }
+  }, [platforms]);
+
+  useEffect(() => {
+    dispatch(setupPage(Number(page)));
+  }, [page]);
+
+  useEffect(() => {
+    const navigateToLink = `/games/page=${currentPage}/${
+      genre ? `genre=${genre}/` : ""
+    }ordering=${
+      filters.ordering === "-added" ? "-popularity" : filters.ordering
+    }/date=${filters.date ? filters.date : " "}/platform=${
+      filters.platform.name
+    }`;
+    navigate(navigateToLink, { replace: true });
+
+    getData(
+      "games",
+      filters.ordering!,
+      filters.date!,
+      String(findPlatId),
+      genre || null
+    );
+  }, [filters, currentPage, genre, location]);
+
+  const searchWithPlatfrom = () => {
+    dispatch(goToFirstPage());
+    if (platfromValue.current) {
+      const platformId = platfromValue.current?.selectedOptions[0].id;
+      setFilters({
+        ...filters,
+        platform: {
+          id: platformId,
+          name: platfromValue.current?.selectedOptions[0].value,
+        },
+      });
+      setFindPlatId(platformId);
+    }
+  };
+
   const searchWithFilters = (e: React.ChangeEvent<HTMLSelectElement>) => {
     dispatch(goToFirstPage());
-    e.currentTarget.name === "ordering"
-      ? setFilters({
-          ...filters,
-          [e.currentTarget.name]: "-" + e.currentTarget.value,
-        })
-      : setFilters({
-          ...filters,
-          [e.currentTarget.name]: e.currentTarget.value,
-        });
-    console.log(filters);
+    setFilters({
+      ...filters,
+      [e.currentTarget.name]: e.currentTarget.value,
+    });
   };
 
   const displayOrderValues = orderByOrdering.map((value) => {
@@ -88,24 +121,27 @@ const GamesContent = ({ getData, type }: GetDataProps) => {
       <option
         key={value}
         className="games-content__select-option"
-        value={value}
+        value={"-" + value}
       >
-        {value.charAt(0).toUpperCase() + value.slice(1)}
+        {value === "added"
+          ? "Popularity"
+          : value.charAt(0).toUpperCase() + value.slice(1)}
       </option>
     );
   });
 
-  const displayOrderDate = orderByDate.map((item) => (
-    <option key={item} className="games-content__select-option" value={item}>
-      {item}
+  const displayOrderDate = orderByDate.map((value: string) => (
+    <option key={value} className="games-content__select-option" value={value}>
+      {Number(value.slice(0, 4)) + 1}
     </option>
   ));
 
-  const displayOrderPlatform = platforms.map((platform: Platform) => (
+  const displayOrderPlatform = platforms?.map((platform: Platform) => (
     <option
       key={platform.name}
       className="games-content__select-option"
-      value={platform.id}
+      id={String(platform.id)}
+      value={platform.name}
     >
       {platform.name}
     </option>
@@ -123,16 +159,16 @@ const GamesContent = ({ getData, type }: GetDataProps) => {
         <select
           name="ordering"
           onChange={(e) => searchWithFilters(e)}
-          defaultValue={filters.ordering}
           className="games-content__select"
+          value={orderingLink}
         >
           {displayOrderValues}
         </select>
         <select
           onChange={(e) => searchWithFilters(e)}
           className="games-content__select"
-          defaultValue={filters.date}
           name="date"
+          value={dateLink}
         >
           <option className="games-content__select-option" value={""}>
             All time
@@ -140,9 +176,10 @@ const GamesContent = ({ getData, type }: GetDataProps) => {
           {displayOrderDate}
         </select>
         <select
+          ref={platfromValue}
+          onChange={searchWithPlatfrom}
           name="platform"
-          onChange={(e) => searchWithFilters(e)}
-          defaultValue={filters.platform}
+          value={platformLink}
           className="games-content__select"
         >
           {displayOrderPlatform}

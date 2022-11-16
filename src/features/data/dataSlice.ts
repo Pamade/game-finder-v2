@@ -1,36 +1,28 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 import { SearchArg } from "../../types";
-export const API_KEY = "c3430b4b38794123bcf646e92f920935";
+export const API_KEY = "8404099eca4445d68543b9380d1f7c66";
 
 interface DataState {
   loading: boolean;
   currentPage: number;
   data: any;
+  singleGameDetails: any;
+  singleGameDetailsLoading: boolean;
 }
 
 const initialState: DataState = {
   loading: false,
   currentPage: 1,
   data: [],
+  singleGameDetails: {},
+  singleGameDetailsLoading: false,
 };
-
-// ORDERINGS: name, released, added, created, updated, rating, metacritic. You can reverse the sort order adding a hyphen, for example: -released
-
-// w zależnośći od linku pobrać endpoint - React Router
-// ENDPOINTS FOR GAMES
-// `https://api.rawg.io/api/games?key=${api_key}&page=${data.currentPage}&ordering=${wybierz z filtra}&dates={2020-01-01, 202-12-31}
-// endpoint: search
-// `https://api.rawg.io/api/games?key=${api_key}&search={nazwaGry}&page=${data.currentPage}
-// endpoint: genres
-// `https://api.rawg.io/api/games?key=${api_key}&genres={action}&page=${data.currentPage}
-// ednpoint: mostpopular
-// https://api.rawg.io/api/games?dates=2021-01-01,2022-12-31&ordering=-added -- here use new Date
 
 export const fetchData = createAsyncThunk(
   "data/fetchData",
   async (
-    { search_type, ordering, date, platform }: SearchArg,
+    { search_type, ordering, date, platform, genre }: SearchArg,
     { getState }
   ) => {
     const { data } = getState() as { data: DataState };
@@ -39,7 +31,9 @@ export const fetchData = createAsyncThunk(
     const findPlatform = platform ? `&platforms=${platform}` : "";
 
     return fetch(
-      `https://api.rawg.io/api/${search_type}?key=${API_KEY}&page=${data.currentPage}${findDate}${findOrdering}${findPlatform}`
+      `https://api.rawg.io/api/${search_type}?key=${API_KEY}&${
+        genre ? `genres=${genre}&` : ""
+      }page=${data.currentPage}${findDate}${findOrdering}${findPlatform}`
     ).then((res) => res.json());
   }
 );
@@ -50,6 +44,25 @@ export const fetchByName = createAsyncThunk(
     const { data } = getState() as { data: DataState };
     return fetch(
       `https://api.rawg.io/api/games?key=${API_KEY}&search=${name}&page=${data.currentPage}`
+    ).then((res) => res.json());
+  }
+);
+
+export const fetchGameDetails = createAsyncThunk(
+  "data/fetchGameDetails",
+  async (slug: string) => {
+    return fetch(`https://api.rawg.io/api/games/${slug}?key=${API_KEY}`).then(
+      (res) => res.json()
+    );
+  }
+);
+
+export const fetchPublishers = createAsyncThunk(
+  "data/fetchPublishers",
+  async (_, { getState }) => {
+    const { data } = getState() as { data: DataState };
+    return fetch(
+      `https://api.rawg.io/api/publishers?key=${API_KEY}&page=${data.currentPage}`
     ).then((res) => res.json());
   }
 );
@@ -75,16 +88,25 @@ export const dataSlice = createSlice({
     builder
       .addCase(fetchData.pending, (state) => {
         state.loading = true;
+        state.data = [];
       })
       .addCase(fetchData.fulfilled, (state, action) => {
-        state.loading = false;
         state.data = action.payload;
+        state.loading = false;
       })
       .addCase(fetchData.rejected, (state) => {
         state.loading = false;
       })
       .addCase(fetchByName.fulfilled, (state, action) => {
         state.data = action.payload;
+      })
+      .addCase(fetchGameDetails.pending, (state) => {
+        state.singleGameDetailsLoading = true;
+        state.singleGameDetails = [];
+      })
+      .addCase(fetchGameDetails.fulfilled, (state, action) => {
+        state.singleGameDetailsLoading = false;
+        state.singleGameDetails = action.payload;
       });
   },
 });
