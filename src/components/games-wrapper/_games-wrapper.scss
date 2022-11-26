@@ -1,0 +1,103 @@
+$bottom-side-radius: 10px;
+$metacritic-border-size: 35px;
+@keyframes slideTopDown {
+    from {
+        margin-top: -20px;
+    }to {
+        margin-top: 0;
+    }
+}
+
+.games-wrapper{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    &__single-game-box{
+        width: 100%;
+        margin: 1rem 0;
+        cursor: pointer;
+    }
+    &__background-single{
+        background-image: url('https://www.kibrispdr.org/data/241/free-hd-background-images-32.jpg');
+        width: 100%;
+        height: 40vh;
+        background-size: cover;
+        background-position: cover;
+    }
+    &__info-single{
+        padding: 2rem 1rem;
+        background-color: $secondary-color;
+    }
+    &__rating{
+        width: $metacritic-border-size;
+        height: $metacritic-border-size;
+        line-height: $metacritic-border-size;
+        background-color: $third-color;
+        text-align: center;
+        font-weight: bold;
+        border-radius: 50%;
+        & p{
+            color: $app-background-color;;
+        }
+    }
+    &__platform-rating{
+        display: flex;
+        color: $app-background-color;
+        justify-content: space-between;
+    }
+    &__additional-info{
+        display: none;
+    }
+}
+
+@media (min-width: 600px){
+    .games-wrapper{
+        flex-direction: row;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        &__single-game-box{
+            width: 45%;
+        }
+    }
+}
+
+@media (min-width: 1200px){
+    .games-wrapper{
+        justify-content: flex-start;
+        &__background-single{
+            height: 25vh;
+        }
+        &__single-game-box{
+            width: 24.5%;
+            margin-right: 5px;
+            position: relative;
+            &:hover .games-wrapper__additional-info{
+                display: block;
+            }
+        }
+        &__info-single{
+            min-height: 80px;
+        }
+        &__additional-info{
+            display: none;
+            box-sizing: border-box;
+            padding: 1rem;
+            z-index: 1;
+            background-color: $primary-color;
+            border-bottom-left-radius: $bottom-side-radius;
+            border-bottom-right-radius: $bottom-side-radius;
+            width: 100%;
+            position: absolute;
+            animation: slideTopDown 0.3s forwards;;
+        }
+        &__genre{
+            display: flex;
+            flex-direction: column;
+        }
+        &__genre-p,&__single-genre, &__release-date{
+            margin: 0.2rem 0;
+            font-size: 0.8rem;
+            color: $app-background-color;
+        }
+    }
+}

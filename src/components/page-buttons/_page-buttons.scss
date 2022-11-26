@@ -1,13 +1,18 @@
-$btn-size: 35px;
+$btn-size: 45px;
 
 .page-buttons{
     display: flex;
     justify-content: center;
     &__btn{
-        color: black;
+        color: rgb(28, 25, 25);
         width:$btn-size;
         height:$btn-size;
         border-radius: 50%;
+        cursor: pointer;
+        transition: .2s;
+        &:hover{
+            background-color: rgb(168, 168, 168);
+        }
         &--active{
             background-color: #2cab33;
             color: white;

@@ -1,0 +1,63 @@
+.creator-details{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    &__form{
+        text-align: center;
+    }
+    &__input{
+        width: 30%;
+    }
+    &__heading{
+        text-transform: capitalize;
+        text-align: center
+    }
+    &__input {
+        @include formInput;
+    }
+    &-results{
+        background-color: $secondary-color;
+        border-radius: 5px;
+        width: 80%;
+        margin: 1rem auto;
+        &__result{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            flex-grow: 1;
+            padding: 1rem 0;
+            text-align: center;
+            align-items: center;
+            cursor: pointer;
+            &:hover{
+                background-color: darken($secondary-color, 5);
+            }
+        }
+        &__image{
+            width: 200px;
+            height: 100px;
+            background-size: cover;
+            background-position:cover;
+        }
+        &__name{
+            width: 50%;
+        }
+    }
+    &__btn{
+        @include formButton;
+        height: 30px;
+    }
+}
+@media (min-width: 760px) {
+    .creator-details{
+        &-results{
+            margin: 0.2rem auto 1rem auto;
+            display: flex;
+            flex-wrap: wrap;
+            &__result{
+                width: 50%;
+                flex-direction: row;
+            }
+        }
+    }
+}

@@ -1,22 +1,36 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
-import { SearchArg } from "../../types";
-export const API_KEY = "8404099eca4445d68543b9380d1f7c66";
+import { SearchArg, Creator } from "../../types";
+
+export interface Data {
+  count: number;
+  next: string;
+  previous: string;
+  results: any;
+  detail?: string;
+}
 
 interface DataState {
   loading: boolean;
   currentPage: number;
-  data: any;
-  singleGameDetails: any;
-  singleGameDetailsLoading: boolean;
+  data: Data;
+  loadingFetchCreatorGames: boolean;
+  isRejected: boolean;
 }
+
+const initialAllData = {
+  count: 0,
+  next: "",
+  previous: "",
+  results: [],
+};
 
 const initialState: DataState = {
   loading: false,
   currentPage: 1,
-  data: [],
-  singleGameDetails: {},
-  singleGameDetailsLoading: false,
+  data: initialAllData,
+  loadingFetchCreatorGames: false,
+  isRejected: false,
 };
 
 export const fetchData = createAsyncThunk(
@@ -31,9 +45,11 @@ export const fetchData = createAsyncThunk(
     const findPlatform = platform ? `&platforms=${platform}` : "";
 
     return fetch(
-      `https://api.rawg.io/api/${search_type}?key=${API_KEY}&${
-        genre ? `genres=${genre}&` : ""
-      }page=${data.currentPage}${findDate}${findOrdering}${findPlatform}`
+      `https://api.rawg.io/api/${search_type}?key=${
+        process.env.REACT_APP_API_KEY
+      }&page_size=10&${genre ? `genres=${genre}&` : ""}page=${
+        data.currentPage
+      }${findDate}${findOrdering}${findPlatform}`
     ).then((res) => res.json());
   }
 );
@@ -43,27 +59,31 @@ export const fetchByName = createAsyncThunk(
   async (name: string, { getState }) => {
     const { data } = getState() as { data: DataState };
     return fetch(
-      `https://api.rawg.io/api/games?key=${API_KEY}&search=${name}&page=${data.currentPage}`
+      `https://api.rawg.io/api/games?key=${process.env.REACT_APP_API_KEY}&search=${name}&page_size=10&search_precise&page=${data.currentPage}`
     ).then((res) => res.json());
   }
 );
 
-export const fetchGameDetails = createAsyncThunk(
-  "data/fetchGameDetails",
-  async (slug: string) => {
-    return fetch(`https://api.rawg.io/api/games/${slug}?key=${API_KEY}`).then(
-      (res) => res.json()
-    );
-  }
-);
-
-export const fetchPublishers = createAsyncThunk(
-  "data/fetchPublishers",
-  async (_, { getState }) => {
+export const fetchCreatorGames = createAsyncThunk(
+  "data/fetchCreatorGames",
+  async (
+    {
+      name,
+      type,
+      search,
+    }: { name: string; type: string; search: string | null },
+    { getState }
+  ) => {
     const { data } = getState() as { data: DataState };
-    return fetch(
-      `https://api.rawg.io/api/publishers?key=${API_KEY}&page=${data.currentPage}`
-    ).then((res) => res.json());
+    let apiCall = "";
+
+    if (search) {
+      apiCall = `https://api.rawg.io/api/games?key=${process.env.REACT_APP_API_KEY}&${type}=${name}&page_size=10&page=${data.currentPage}&search=${search}&search_precise&ordering=-popularity`;
+    } else {
+      apiCall = `https://api.rawg.io/api/games?key=${process.env.REACT_APP_API_KEY}&${type}=${name}&page_size=10&page=${data.currentPage}&ordering=-popularity&search_precise`;
+    }
+
+    return fetch(apiCall).then((res) => res.json());
   }
 );
 
@@ -79,6 +99,7 @@ export const dataSlice = createSlice({
     },
     goToFirstPage: (state) => {
       state.currentPage = 1;
+      state.data.detail = "";
     },
     setupPage: (state, action: PayloadAction<number>) => {
       state.currentPage = action.payload;
@@ -88,25 +109,36 @@ export const dataSlice = createSlice({
     builder
       .addCase(fetchData.pending, (state) => {
         state.loading = true;
-        state.data = [];
       })
       .addCase(fetchData.fulfilled, (state, action) => {
         state.data = action.payload;
         state.loading = false;
       })
-      .addCase(fetchData.rejected, (state) => {
-        state.loading = false;
+      .addCase(fetchByName.pending, (state) => {
+        state.loading = true;
       })
       .addCase(fetchByName.fulfilled, (state, action) => {
         state.data = action.payload;
+        state.loading = false;
       })
-      .addCase(fetchGameDetails.pending, (state) => {
-        state.singleGameDetailsLoading = true;
-        state.singleGameDetails = [];
+      .addCase(fetchCreatorGames.pending, (state) => {
+        if (state.currentPage === 1) {
+          state.loading = true;
+        } else {
+          state.loadingFetchCreatorGames = true;
+        }
       })
-      .addCase(fetchGameDetails.fulfilled, (state, action) => {
-        state.singleGameDetailsLoading = false;
-        state.singleGameDetails = action.payload;
+      .addCase(fetchCreatorGames.fulfilled, (state, action) => {
+        if (state.currentPage === 1) {
+          state.data = action.payload;
+          state.loading = false;
+        } else {
+          // append items to data when scrolling
+          action.payload.results.map((publisher: Creator) =>
+            state.data.results.push(publisher)
+          );
+          state.loadingFetchCreatorGames = false;
+        }
       });
   },
 });

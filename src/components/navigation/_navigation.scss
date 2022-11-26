@@ -1,31 +1,61 @@
+@mixin navHeaderColors ($color) {
+    margin: 1rem 2rem 1rem 0;
+    border-bottom: 1px solid $color;
+    
+    & a{
+        font-size: 1.1rem;
+        color: $color;
+    }
+}
 .navigation{
     font-weight: bold;
-    
+    background-color: $secondary-color;
     &__list-item-genre{
+        display: none;
+    }
+    &__list-item--genres{
+        display: none;
+    }
+    &__list-item-popular{
         display: none;
     }
     
 }
 @media (min-width: 1200px) {
     .navigation{
+        margin: 0;
+        padding: 0 2rem 0 2rem;
+        width: 12vw;
+        &__list-item--genres{
+            display: block;
+        }
         &__genres{
             display: block;
         }
         &__list-item-genres{
             height: 5px;
         }
-        &__list-item-genre{
-            height: 1px;
+        
+        &__list-item--home{
+            @include navHeaderColors(#18e7cf);
+        }
+        &__list-item--developers{
+            @include navHeaderColors(#72c8be);
+        }
+        &__list-item--publishers{
+            @include navHeaderColors(#00a3ff);
+        }
+        &__list-item--all-games{
+            @include navHeaderColors(#e25d4b);
+        }
+        &__list-item--genres{
+            color: #efbc40;
+            @include navHeaderColors(#efbc40);
+        }
+        &__list-item-genre, &__list-item-popular{
             font-size: 0.8rem;
+            margin: 0.2rem 0;
             display: block;
-            &--hide{
-                display: none;
-            }
-            &-display{
-                text-align: center;
-                font-size: 1rem;
-                cursor: pointer;
-            }
         }
     }
 }

@@ -1,7 +1,7 @@
-$header-bg: #262525;
+$header-bg: #111e2b;
 
-.header{
-    &__nav{
+.header {
+    &__nav {
         display: flex;
         justify-content: space-between;
         align-items: center;
@@ -9,62 +9,52 @@ $header-bg: #262525;
         background-color: $header-bg;
         position: relative;
     }
-    &__input{
-        box-shadow: inset #abacaf 0 0 0 2px;
-        border: 0;
-        background: rgba(0, 0, 0, 0);
-        border-radius: 6px;
-        padding: 6px 12px;
-        line-height: 1.4;
-        font-size: 16px;
-        height: 20px;
-        transition: all .2s ease;
-        &:focus{
-            background: $primary-color;
-            user-select: $header-bg;
-            outline: 0;
-            box-shadow: 0 0 0 0 $primary-color inset, $app-background-color 0 0 0 3px;
-            color: $header-bg;
-        }
-        &::selection{
-            background-color: rgb(206, 206, 206);
-        }
+    &__form {
+        display: flex;
     }
-    &__display-list{
+    &__input {
+        width: 50%;
+        @include formInput;
+    }
+    &__btn {
+        @include formButton;
+    }
+    &__display-list {
         position: absolute;
         padding: 1rem 0;
         text-align: center;
         top: 100%;
         left: 0;
         width: 100%;
-        background-color: darken($header-bg, 5);
+        background-color: $secondary-color;
+        z-index: 2;
     }
-    &__mobile-icon{
+    &__mobile-icon {
         width: 40px;
     }
-    &__empty{
+    &__empty {
         display: none;
     }
 }
 
 @media (min-width: 1200px) {
-    .header{
-        &__nav{
+    .header {
+        &__nav {
             padding: 1rem 20vw;
             justify-content: space-evenly;
         }
-        &__empty{
+        &__empty {
             display: block;
         }
-        &__mobile-nav{
+        &__mobile-nav {
             display: none;
         }
-        &__search{
+        &__search {
             width: 50%;
             text-align: center;
         }
-        &__input{
-            width: 100%;
+        &__input {
+            width: 100%
         }
     }
 }

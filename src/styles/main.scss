@@ -5,18 +5,19 @@
 @import '../components/header/header';
 @import '../components/navigation/navigation';
 @import '../components/aside-navigation/aside-navigation';
-@import '../gamesContent/games-content';
-@import '../gamesContent/games-wrapper/games-wrapper';
-@import '.././components/page-buttons/page-buttons';
-@import '../gamesContent/games-trendings/games-trendings';
-@import '../components/game-details/game-details';
-@import '../components/game-details/MainInfo/main-info';
-@import '../components/game-details/MoreInfo/more-info';
-@import '../components/game-details/Achievements/achievements';
-@import '../components/game-details/Description/description';
-@import '../components/game-details/Developers/developers';
-@import '../components/game-details/Screenshots/screenshots';
-@import "../components/publishers/publishers"
+@import '../components/games-content/games-content';
+@import '../components/games-wrapper/games-wrapper';
+@import '../components/page-buttons/page-buttons';
+@import "../features/singleGameDetails/game-details";
+@import '../features/singleGameDetails/MainInfo/main-info';
+@import '../features/singleGameDetails/MoreInfo/more-info';
+@import '../features/singleGameDetails/Achievements/achievements';
+@import '../features/singleGameDetails/Description/description';
+@import '../features/singleGameDetails/Developers/developers';
+@import '../features/singleGameDetails/Screenshots/screenshots';
+@import "../components/creators/creators";
+@import "../components/creators/creator-details";
+@import "../components/spinner/spinner-center";
 
 
 
