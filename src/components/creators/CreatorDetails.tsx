@@ -69,7 +69,7 @@ const CreatorDetails = ({ type }: { type: string }) => {
     setValue(e.currentTarget.value);
     setFetchingGames(true);
     fetch(
-      `https://api.rawg.io/api/games?key=${process.env.REACT_APP_API_KEY}&${type}=${name}&page_size=${RESULTS_SIZE}&page=1&search=${e.currentTarget.value}&search_precise&ordering=-popularity`
+      `https://api.rawg.io/api/games?key=${process.env.REACT_APP_API_KEY}&${type}=${name}&page_size=${RESULTS_SIZE}&page=1&search=${e.currentTarget.value}&search_precise=true&ordering=-popularity`
     )
       .then((res) => res.json())
       .then((data) => {

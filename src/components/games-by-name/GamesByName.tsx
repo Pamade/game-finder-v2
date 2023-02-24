@@ -19,6 +19,7 @@ const GamesByName = () => {
   }, []);
 
   useEffect(() => {
+    console.log(currentPage);
     dispatch(fetchByName(gameName!));
     navigate(`/search/${gameName}/page=${currentPage}`);
   }, [currentPage]);

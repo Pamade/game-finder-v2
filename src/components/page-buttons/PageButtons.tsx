@@ -17,49 +17,55 @@ const PageButtons = () => {
     resultsCountDvidedByGamePerSize > MAX_POSSIBLE_PAGE
       ? MAX_POSSIBLE_PAGE
       : resultsCountDvidedByGamePerSize;
-
+  console.log(data);
   const isNextPage = data.next && maxPage - 1 !== currentPage;
   const isFirstPage = currentPage > 3 && maxPage >= 3;
   const isCurrentPageEqualToMax = currentPage !== maxPage;
 
   return (
-    <div className="page-buttons">
-      {isFirstPage && (
-        <button
-          onClick={() => dispatch(goToFirstPage())}
-          className="page-buttons__btn"
-        >
-          1
-        </button>
+    <>
+      {data.count === 0 ? (
+        <></>
+      ) : (
+        <div className="page-buttons">
+          {isFirstPage && (
+            <button
+              onClick={() => dispatch(goToFirstPage())}
+              className="page-buttons__btn"
+            >
+              1
+            </button>
+          )}
+          {data.previous && (
+            <button
+              onClick={() => dispatch(goToPreviousPage())}
+              className="page-buttons__btn"
+            >
+              {currentPage - 1}
+            </button>
+          )}
+          <button className="page-buttons__btn page-buttons__btn--active">
+            {currentPage}
+          </button>
+          {isNextPage && isCurrentPageEqualToMax && (
+            <button
+              onClick={() => dispatch(goToNextPage())}
+              className="page-buttons__btn"
+            >
+              {currentPage + 1}
+            </button>
+          )}
+          {isCurrentPageEqualToMax && (
+            <button
+              onClick={() => dispatch(setupPage(maxPage))}
+              className="page-buttons__btn"
+            >
+              {maxPage}
+            </button>
+          )}
+        </div>
       )}
-      {data.previous && (
-        <button
-          onClick={() => dispatch(goToPreviousPage())}
-          className="page-buttons__btn"
-        >
-          {currentPage - 1}
-        </button>
-      )}
-      <button className="page-buttons__btn page-buttons__btn--active">
-        {currentPage}
-      </button>
-      {isNextPage && isCurrentPageEqualToMax && (
-        <button
-          onClick={() => dispatch(goToNextPage())}
-          className="page-buttons__btn"
-        >
-          {currentPage + 1}
-        </button>
-      )}
-      {isCurrentPageEqualToMax && (
-        <button
-          onClick={() => dispatch(setupPage(maxPage))}
-          className="page-buttons__btn"
-        >
-          {maxPage}
-        </button>
-      )}
-    </div>
+    </>
   );
 };
 

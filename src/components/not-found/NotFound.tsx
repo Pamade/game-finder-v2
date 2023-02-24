@@ -1,5 +1,5 @@
 const NotFound = () => {
-  return <h1>Results Not Found</h1>;
+  return <h3 style={{ textAlign: "center" }}>Results Not Found</h3>;
 };
 
 export default NotFound;

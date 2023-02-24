@@ -28,7 +28,7 @@ const App = () => {
   }, [location]);
 
   const isSearched = data.results && !loading;
-
+  console.log(data);
   return (
     <IsSearchedContext.Provider value={isSearched}>
       <div className="App">
@@ -51,51 +51,54 @@ const App = () => {
           {data.detail ? (
             <NotFound />
           ) : (
-            <Routes>
-              <Route path="/" element={<GamesTrendings />} />
-              <Route
-                path="/trendings/page=:page"
-                element={<GamesTrendings />}
-              />
-              <Route
-                path="/publishers/page=:page"
-                element={<Creators type="publishers" />}
-              />
-              <Route
-                path="/developers/page=:page"
-                element={<Creators type="developers" />}
-              />
-              <Route
-                path="/publishers/:name"
-                element={<CreatorDetails type="publishers" />}
-              />
-              <Route
-                path="/developers/:name"
-                element={<CreatorDetails type="developers" />}
-              />
-              <Route
-                path="/developers/:name/search=:creatorSearch"
-                element={<CreatorDetails type="developers" />}
-              />
-              <Route
-                path="/publishers/:name/search=:creatorSearch"
-                element={<CreatorDetails type="publishers" />}
-              />
-              <Route
-                path="/games/page=:page/ordering=:orderingLink/date=:dateLink/platform=:platformLink"
-                element={<GamesContent />}
-              />
-              <Route
-                path="/games/page=:page/genre=:genre/ordering=:orderingLink/date=:dateLink/platform=:platformLink"
-                element={<GamesContent />}
-              />
-              <Route
-                path="/search/:gameName/page=:page"
-                element={<GamesByName />}
-              />
-              <Route path="/game/:gameName" element={<GameDetails />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
+            <>
+              {data.count === 0 && !loading && <NotFound />}
+              <Routes>
+                <Route path="/" element={<GamesTrendings />} />
+                <Route
+                  path="/trendings/page=:page"
+                  element={<GamesTrendings />}
+                />
+                <Route
+                  path="/publishers/page=:page"
+                  element={<Creators type="publishers" />}
+                />
+                <Route
+                  path="/developers/page=:page"
+                  element={<Creators type="developers" />}
+                />
+                <Route
+                  path="/publishers/:name"
+                  element={<CreatorDetails type="publishers" />}
+                />
+                <Route
+                  path="/developers/:name"
+                  element={<CreatorDetails type="developers" />}
+                />
+                <Route
+                  path="/developers/:name/search=:creatorSearch"
+                  element={<CreatorDetails type="developers" />}
+                />
+                <Route
+                  path="/publishers/:name/search=:creatorSearch"
+                  element={<CreatorDetails type="publishers" />}
+                />
+                <Route
+                  path="/games/page=:page/ordering=:orderingLink/date=:dateLink/platform=:platformLink"
+                  element={<GamesContent />}
+                />
+                <Route
+                  path="/games/page=:page/genre=:genre/ordering=:orderingLink/date=:dateLink/platform=:platformLink"
+                  element={<GamesContent />}
+                />
+                <Route
+                  path="/search/:gameName/page=:page"
+                  element={<GamesByName />}
+                />
+                <Route path="/game/:gameName" element={<GameDetails />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </>
           )}
         </main>
       </div>
